@@ -1,0 +1,70 @@
+version: '3.3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.8.3-management
+    container_name: rabbitmq
+    restart: always
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:  # 时区挂载
+      - /etc/localtime:/etc/localtime
+#      - ./data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=123456
+  redis:
+    image: redis
+    restart: always
+    hostname: redis
+    container_name: redis
+    privileged: true
+    ports:
+      - "6379:6379"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./redis/data:/data
+      - ./redis/redis.conf:/etc/redis/redis.conf
+      - ./redis/logs:/logs
+      - /etc/localtime:/etc/localtime
+  nginx:
+    image: nginx
+    restart: always
+    hostname: nginx
+    container_name: nginx-fastapi
+    privileged: true
+    ports: # 端口映射 本地端口：容器端口
+      - "80:80"
+    volumes: # 文件挂载到本地 本地路径：容器路径
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/logs/:/var/log/nginx/
+      - /etc/localtime:/etc/localtime
+    links:
+      - fastapi
+  fastapi:
+    # 容器重启
+    restart: always
+    # 容器构建
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    # 镜像名
+    image: fastapi
+    # 容器名
+    container_name: fastapi
+    # 端口映射
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/fastapi/logs
+      - /etc/localtime:/etc/localtime
+    # 依赖的容器对象
+    links:
+      - redis
+      - rabbitmq
+    # 启动顺序
+    depends_on:
+      - redis
+      - rabbitmq

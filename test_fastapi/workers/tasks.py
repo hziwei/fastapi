@@ -34,7 +34,7 @@ def dingding_notice_task(js: Dict, task_id, trace_id):
         t.set_tag("task_id", task_id)
         t.set_tag("trace_id", trace_id)
         try:
-            url = "https://oapi.dingtalk.com/robot/send?access_token=60065ff3b473eb079ab115669a3abd4fc06e2e63ef4e72617da054cbd75b2f30"
+            url = "https://oapi.dingtalk.com/robot/send?access_token=xxxxxxx"
             js = str(js)
             logger.info(f"钉钉业务记录:{js}")
             # print(driver.logger.info(f"钉钉业务记录:{js}"))
@@ -62,7 +62,7 @@ def dingding_notice_task2(js: Dict, task_id, trace_id):
         t.set_tag("task_id", task_id)
         t.set_tag("trace_id", trace_id)
         try:
-            url = "https://oapi.dingtalk.com/robot/send?access_token=60065ff3b473eb079ab115669a3abd4fc06e2e63ef4e72617da054cbd75b2f30"
+            url = "https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxxx"
             js = str(js)
             logger.info(f"钉钉业务记录2:{js}")
             # print(driver.logger.info(f"钉钉业务记录:{js}"))
